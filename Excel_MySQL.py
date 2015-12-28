@@ -4,7 +4,8 @@ xlf =xlrd.open_workbook('MF.xls')
 #Return list of sheets in Excel file:
 def Sheets_Name(x):
     sheets_name=[sheet.name for sheet in x.sheets()]
-    print (sheets_name)
+    for i,item in enumerate(sheets_name):
+        print (i,item)
 
 #Getting ordered list of chosen sheets'columns:
 def Sheet_Columns(n):
@@ -35,6 +36,11 @@ def General_Type(n,row):
     for i, item in enumerate(type_test):
         print (i,item)
 
+#Sheets_Name(xlf)
+#Sheet_Columns(7)
+#Column_length(7,1)
+#General_Type(7,1)
+#Column_Type(7,2)
 
 #Establishing MySQL Connection:
 import pymysql
@@ -42,43 +48,34 @@ import pymysql
 conn = pymysql.connect(host='localhost',user='root',password='root',database='master_file',charset='utf8')
 cur = conn.cursor()
 
-#cur.execute('USE master_file')
+sheets_name=[sheet.name for sheet in xlf.sheets()]
+Sheet=xlf.sheet_by_index(7)
+columns=[Sheet.cell_value(0,col)for col in range(Sheet.ncols)]
 
-#cur.execute('CREATE TABLE %s (%s INT, %s VARCHAR(40),%s VARCHAR(5),%s INT, %s FLOAT(10,2),%s INT, %s DATE, %s DATE, %s VARCHAR(50),%s VARCHAR(10))'
-      #%(sheets_name[5],columns1[0],columns1[4],columns1[5],columns1[6],columns1[7],columns1[8],columns1[2],columns1[12],columns1[13],columns1[1]))
+cur.execute('USE master_file')
 
+#Creating MYSQL Table:
 
+cur.execute('CREATE TABLE %s (%s INT, %s VARCHAR(4),%s INT, %s DATE, %s INT)'
+%(sheets_name[7],columns[0],columns[1],columns[2],columns[3],columns[4]))
 
 
 #Populating created table with data:
 import datetime
-Sheet=xlf.sheet_by_index()
 
-"""for row in range (1,Sheet.nrows):
+for row in range (1,Sheet.nrows):
     values=int(Sheet.cell_value(row,0))
-    values4=Sheet.cell_value(row,4)
-    values5=Sheet.cell_value(row,5)
-    values6=int(Sheet.cell_value(row,6))
-    values7=Sheet.cell_value(row,7)
-    values8=int(Sheet.cell_value(row,8))
-    values13=Sheet.cell_value(row,13)
     values1=Sheet.cell_value(row,1)
-    values14=values13[0:5]
+    values2=int(Sheet.cell_value(row,2))
+    values4=int(Sheet.cell_value(row,4))
 
 #Changing date format:
-    exceltime2=int(Sheet.cell_value(row,2))
-    time_tuple=xlrd.xldate_as_tuple(exceltime2,0)
-    dt2=datetime.datetime(*time_tuple)
-    values2=str(dt2)[0:10]
+    exceltime=int(Sheet.cell_value(row,3))
+    time_tuple=xlrd.xldate_as_tuple(exceltime,0)
+    dt=datetime.datetime(*time_tuple)
+    values3=str(dt)[0:10]
 
-    exceltime12=int(Sheet.cell_value(row,12))
-    time_tuple1=xlrd.xldate_as_tuple(exceltime12,0)
-    dt12=datetime.datetime(*time_tuple1)
-    values12=str(dt12)[0:10]
+    cur.execute('INSERT INTO %s (%s,%s,%s,%s,%s) VALUES (%i,%r,%i,%r,%i);'
+                %(sheets_name[7],columns[0],columns[1],columns[2],columns[3],columns[4],values,values1,values2,values3,values4))
 
-
-    #cur.execute('INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (%i,%r,%r,%i,%.2f,%i,%r,%r,%r,%r,%r);'
-                #%(sheets_name[5],columns1[0],columns1[4],columns1[5],columns1[6],columns1[7],columns1[8],
-    #columns1[2],columns1[12],'Vendor_Code',columns1[13],columns1[1],values,values4,values5,values6, values7,values8,values2,values12, values14,values13,values1))"""
-
-#conn.commit()
+conn.commit()
