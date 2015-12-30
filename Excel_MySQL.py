@@ -36,11 +36,11 @@ def General_Type(n,row):
     for i, item in enumerate(type_test):
         print (i,item)
 
-#Sheets_Name(xlf)
-#Sheet_Columns(7)
-#Column_length(7,1)
-#General_Type(7,1)
-#Column_Type(7,2)
+#Sheets_Name()
+#Sheet_Columns()
+#Column_length()
+#General_Type()
+#Column_Type()
 
 #Establishing MySQL Connection:
 import pymysql
@@ -56,8 +56,8 @@ cur.execute('USE master_file')
 
 #Creating MYSQL Table:
 
-cur.execute('CREATE TABLE %s (%s INT, %s VARCHAR(4),%s INT, %s DATE, %s INT)'
-%(sheets_name[7],columns[0],columns[1],columns[2],columns[3],columns[4]))
+#cur.execute('CREATE TABLE %s (%s INT, %s VARCHAR(4),%s INT, %s DATE, %s INT)'
+#%(sheets_name[7],columns[0],columns[1],columns[2],columns[3],columns[4]))
 
 
 #Populating created table with data:
@@ -79,3 +79,6 @@ for row in range (1,Sheet.nrows):
                 %(sheets_name[7],columns[0],columns[1],columns[2],columns[3],columns[4],values,values1,values2,values3,values4))
 
 conn.commit()
+
+cur.close()
+conn.close()
